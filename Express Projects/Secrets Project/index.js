@@ -2,9 +2,9 @@
 //Make sure you have installed all the dependencies with "npm i".
 //The password is ILoveProgramming
 import express from "express";
+import bodyParser from "body-parser";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import bodyParser from "body-parser";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
@@ -27,4 +27,4 @@ app.post("/check", (req, res) => {
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
-  });
+});
