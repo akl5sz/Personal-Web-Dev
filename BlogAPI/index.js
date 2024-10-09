@@ -49,6 +49,8 @@ app.get("/posts", (req,res) => {
 app.get("/posts/:id", (req,res) => {
   const id = parseInt(req.params.id);
   const foundPost = posts.find((post) => post.id === id);
+  if(!foundPost) return res.status(404).json({error: "Post not found."});
+
   res.json(foundPost);
 });
 
@@ -69,15 +71,12 @@ app.post("/posts", (req,res) => {
 app.patch("/posts/:id", (req,res) => {
   const id = parseInt(req.params.id);
   let foundPost = posts.find((post) => post.id === id);
-  if(req.body.title){
-    foundPost.title = req.body.title;
-  } 
-  if(req.body.content){
-    foundPost.content = req.body.content;
-  } 
-  if(req.body.author){
-    foundPost.author = req.body.author;
-  }
+  if(!foundPost) return res.status(404).json({error: "Post not found."});
+
+  if(req.body.title) foundPost.title = req.body.title;
+  if(req.body.content) foundPost.content = req.body.content; 
+  if(req.body.author) foundPost.author = req.body.author;
+
   res.json(foundPost);
 });
 
@@ -85,12 +84,10 @@ app.patch("/posts/:id", (req,res) => {
 app.delete("/posts/:id", (req,res) => {
   const id = parseInt(req.params.id);
   const postIndex = posts.findIndex((post) => post.id === id);
-  if(postIndex >= 0){
-    posts.splice(postIndex, 1);
-    res.sendStatus(200);
-  } else {
-    res.status(404).json({error: `Post with id: ${id} not found. No posts were deleted`});
-  }
+  if(postIndex === -1) return res.status(404).json({error: "Post not found."});
+
+  posts.splice(postIndex, 1);
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {
